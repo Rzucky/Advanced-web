@@ -21,18 +21,7 @@ const server = app.listen(PORT, () => {
 app.get('/getData', async function(req, res) {
 	console.log('GOTTEN REQUEST')
 	data.teamsData = await getSortedData(data.teamsData);
-	data.matchData[38].comments = [
-		{
-			author: 'User1',
-			text: 'Test',
-			date: 'date1232'
-		},
-		{	
-			author: 'User2',
-			text: 'ZASTGD',
-			date: 'date1232324234'
-		},
-	]
+
 	if (data){
 		res.send({error: false, data: data.matchData, teams: data.teamsData})
 	}
@@ -48,9 +37,7 @@ app.post('/changematch', async function(req, res) {
 		for (let i = 0; i< data.matchData.length; i++)
 		{
 			if (data.matchData[i].idx === changedGame.idx)
-			{
-				console.log(data.matchData[i])
-				
+			{			
 				data.matchData.splice(i,1);
 			} 
 		}
@@ -70,10 +57,8 @@ app.post('/changematch', async function(req, res) {
 			} 
 		}
 	}
-	console.log('b{{{{{{{{{{{{{{', data)
+	
 	data = await recalculateData(data);
-	console.log('awsdoihasodhsa', data)
-
 		
 	if (data){
 		res.send({error: false, data: data.matchData, teams: data.teamsData})
@@ -101,7 +86,24 @@ async function recalculateData(data)
 				points: 0,
 			}
 		}
-		let score = match.score.split(' - ')
+		let score;
+		try{
+			score = match.score.split(' - ')
+			if(score.length != 2)
+			{
+				score = match.score.split('-')
+				if(score.length != 2)
+				{
+					score[0]=0;
+					score[1]=0;
+				}
+			}
+		}
+		catch(e) {
+			console.log(e)
+			score[0]=0;
+			score[1]=0;
+		}
 		score[0] = parseInt(score[0])
 		score[1] = parseInt(score[1])
 
