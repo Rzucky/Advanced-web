@@ -2,7 +2,7 @@
     <div class="container-md">
       <div class="border border-primary row">
         <div class="col-md-2">
-          <h5>{{this.result.idx}} {{this.result.date}}</h5>
+          <h5>{{this.result.date}}</h5>
         </div>
         <div class="col-md-6">
           <h4> {{this.result.teamOne}} - {{this.result.teamTwo}}</h4>

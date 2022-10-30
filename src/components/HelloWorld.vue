@@ -4,7 +4,7 @@
       <button class="btn btn-primary" data-bs-target="#collapseTarget" data-bs-toggle="collapse"> Show match results </button>&nbsp;&nbsp;
       <button class="btn btn-secondary" @click="login">Log in</button>
       <button class="btn btn-secondary" @click="logout">Log out</button>
-      <h4>Currently logged in as: {{ this.user.name }}</h4>
+      <!-- <h4>Currently logged in as: {{ this.user.name }}</h4> -->
       <!-- {{this.user}} -->
     </div>
     <div class="mx-auto col-md-10">

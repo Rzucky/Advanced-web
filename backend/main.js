@@ -10,7 +10,7 @@ app.use(expressCspHeader({
 })); 
 app.use(express.json())
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 const NUMDAYS = process.env.NUMDAYS || 5;
 app.use(cors())
 let data = null;

@@ -3,7 +3,7 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: process.env.NODE_ENV === 'production'
-  ? 'https://league.onrender.com/'
+  ? '/' // 'https://league.onrender.com/'
   : '/',
 //   server: {
 //     proxy: {
