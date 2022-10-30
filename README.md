@@ -1,5 +1,9 @@
 # lab1
 
+# WORKING LINK: https://roko.jarza.cc/
+S obzirom da hosting na Rendereru i Heroku nije uspio, hosting je na Contabo VPS-u od kolege. Ostali projekti će biti na vlastitom hostingu
+
+
 ## Project setup
 ```
 npm install
