@@ -15,9 +15,9 @@ module.exports = defineConfig({
 //       },
 //     },
 //   },
-  devServer: {
-	proxy: 'http://localhost/*',
-	},
+//   devServer: {
+// 	proxy: 'http://localhost/*',
+// 	},
 	// configureWebpack: {
     //     plugins: [
     //         new Dotenv()

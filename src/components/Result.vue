@@ -27,14 +27,14 @@
                 <h4 class="mr-2">{{comment.author}}&nbsp;</h4>
                 <span class="dot mb-1"></span>
                 <span class="mb-1 ml-2">&nbsp;{{comment.date}}&nbsp;&nbsp;</span>
-                <button v-if="this.isAdmin" class="btn btn-danger" @click="$emit('deleteC', this.result, comment)"> DELETE COMMENT</button>
+                <button v-show="hasAccess(comment.author)" class="btn btn-danger" @click="$emit('deleteC', this.result, comment)"> DELETE COMMENT</button>
               </div>
               <div class="comment-text-sm">
                 <span>{{comment.text}}</span>
               </div>
             </div>
           </div>
-          <button v-if="this.isAdmin" class="btn btn-danger" @click="$emit('deleteM', this.result)"> DELETE </button>
+          <button v-show="checkIsAdmin()" class="btn btn-danger" @click="$emit('deleteM', this.result)"> DELETE </button>
           <div class="collapse py-2" id="collapseEdit">
             <input v-model="team1" type="text" class="form-control mr-3" :placeholder=this.result.teamOne>
             <input v-model="team2" type="text" class="form-control mr-3" :placeholder=this.result.teamTwo>
@@ -52,6 +52,7 @@ export default {
     {
         return{
             isAdmin: false,
+            user: this.$auth0.user,
         }
     },
     props: {
@@ -72,13 +73,25 @@ export default {
     },
     methods:
     {
-        // isAdmin(){
-        //     return true;
-        // },
+        checkIsAdmin(){
+            if (this.user && this.user.sub === process.env.VUE_APP_ADMIN_ID)
+            {
+                this.isAdmin = true;
+                return true
+            }
+            return false
+        },
+        hasAccess(author) {
+            if (this.user && (this.user.name === author || this.isAdmin))
+            {
+                return true
+            }
+            return false
+        }
     },
     mounted()
     {
-       this.isAdmin = true;
+       this.isAdmin = this.checkIsAdmin();
     },
 }
 </script>

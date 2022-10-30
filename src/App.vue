@@ -1,7 +1,7 @@
 <template>
     <div class="px-2">
         <div class="containerBG">
-            <HelloWorld msg="Welcome to Your Vue.js App"/>
+            <HelloWorld/>
         </div>
     </div>
 </template>

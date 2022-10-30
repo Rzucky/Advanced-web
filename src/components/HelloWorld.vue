@@ -1,7 +1,10 @@
 <template>
     <div class="container-xl p-2">
       <h1> PREMIER LEAGUE LEADERBOARDS AND MATCH RESULTS</h1>
-      <button class="btn btn-primary" data-bs-target="#collapseTarget" data-bs-toggle="collapse"> Show match results </button>
+      <button class="btn btn-primary" data-bs-target="#collapseTarget" data-bs-toggle="collapse"> Show match results </button>&nbsp;&nbsp;
+      <button class="btn btn-secondary" @click="login">Log in</button>
+      <button class="btn btn-secondary" @click="logout">Log out</button>
+      <!-- {{this.user}} -->
     </div>
     <div class="mx-auto col-md-10">
       <div class="pt-10">
@@ -36,11 +39,11 @@
     <div class="container-md">
       <div class="collapse py-2" id="collapseTarget">
         <div class="container-sm py-2">
-          <button v-if="this.isAdmin" class="btn btn-warning" data-bs-target="#collapseEdit" data-bs-toggle="collapse"> EDIT MATCHES </button>
+          <button v-show="checkIsAdmin()" class="btn btn-warning" data-bs-target="#collapseEdit" data-bs-toggle="collapse"> EDIT MATCHES </button>
         </div>
         <br>
-        <div class="border border-info container-md py-2">
-          <button v-if="this.isAdmin" class="btn btn-info" data-bs-target="#collapseNew" data-bs-toggle="collapse"> ENTER MATCH </button>
+        <div v-show="checkIsAdmin()" class="border border-info container-md py-2">
+          <button v-show="checkIsAdmin()" class="btn btn-info" data-bs-target="#collapseNew" data-bs-toggle="collapse"> ENTER MATCH </button>
           <div class="collapse py-2" id="collapseNew">
             <input v-model="team1" type="text" class="form-control mr-3" placeholder="Team One">
             <input v-model="team2" type="text" class="form-control mr-3" placeholder="Team Two">
@@ -67,6 +70,7 @@ export default {
     {
         return{
             isAdmin: false,
+            user: this.$auth0.user,
             results: [
                 {
                     teamOne: "Man Utd",
@@ -107,10 +111,16 @@ export default {
         }
     },
     methods: {
+        login() {
+            this.$auth0.loginWithRedirect();
+        },
+        logout() {
+            this.$auth0.logout({ returnTo: window.location.origin });
+        },
         async addComment(match, message){
             console.log(match, message)
             match.comments.push({
-                author: 'TODO',
+                author: this.user.name,
                 text: message,
                 date: moment().format('YYYY-MM-DD'),
             })
@@ -140,7 +150,6 @@ export default {
             await this.changeMatch(match)
         },
         async deleteComment(match, comment){
-            // TODO implement person check
             for(const comm of match.comments)
             {
                 if (comm.text == comment.text)
@@ -183,6 +192,21 @@ export default {
                 this.teams = response.data.teams;
             })
             .catch(error => console.log(error));
+        },
+        checkIsAdmin(){
+            if (this.user && this.user.sub === process.env.VUE_APP_ADMIN_ID)
+            {
+                this.isAdmin = true;
+                return true
+            }
+            return false
+        },
+        hasAccess(author) {
+            if (this.user && (this.user.name === author || this.isAdmin))
+            {
+                return true
+            }
+            return false
         }
     },
     computed: {
@@ -206,13 +230,11 @@ export default {
             return this.teams.sort(compare);
         }
     },
-    props: {
-        msg: String
-    },
     components: { Result },
     async mounted()
     {
-        this.isAdmin = true;
+
+        this.isAdmin = this.checkIsAdmin();
 
         axios
         .get('http://localhost:5000/getData')
