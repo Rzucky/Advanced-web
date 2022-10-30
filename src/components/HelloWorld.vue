@@ -187,7 +187,7 @@ export default {
         },
         async changeMatch(match){
             axios
-            .post('http://localhost:10000/changematch', match)
+            .post('https://league.onrender.com:10000/changematch', match)
             .then(response => {
                 this.results = response.data.data.reverse();
                 this.teams = response.data.teams;
@@ -238,7 +238,7 @@ export default {
         this.isAdmin = this.checkIsAdmin();
 
         axios
-        .get('http://localhost:10000/getData')
+        .get('https://league.onrender.com:10000/getData')
         .then(response => {
             this.results = response.data.data.reverse();
             this.teams = response.data.teams;
