@@ -11,7 +11,9 @@ npm run serve
 ```
 
 ### Compiles and run locally (concurrently build and backend)
+```
 npm run start
+```
 
 ### Lints and fixes files
 ```
