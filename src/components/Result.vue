@@ -9,35 +9,38 @@
         </div>
         <div class="col-md-4">
           <h4> {{this.result.score}}</h4>
-          <!-- <button class="btn btn-secondary" data-bs-target="#collapseComment" data-bs-toggle="collapse"> Comment </button> -->
         </div>
-
-
-              <div class="coment-bottom p-2 px-4"> 
-                <!-- <div class="collapse py-2" id="collapseComment"> -->
-                <div class="d-flex flex-row add-comment-section mt-4 mb-4">
-                    <div class="profile-image"><img class="rounded-circle" src="https://i.imgur.com/CFpa3nK.jpg" width="50"></div>
-                  <input  v-model="message" type="text" class="form-control mr-3" placeholder="Add comment">
-                  <button v-on:click="addComment" class="btn btn-primary" type="button">Comment</button>
+        <div class="coment-bottom p-2 px-4">
+          <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+            <div class="profile-image">
+              <img class="rounded-circle" src="https://i.imgur.com/CFpa3nK.jpg" width="50">
+            </div>
+            <input v-model="message" type="text" class="form-control mr-3" placeholder="Add comment">
+            <button @click="$emit('addComment', this.result, message)" class="btn btn-primary" type="button">Comment</button>
+          </div>
+          <div v-for="comment in this.result.comments" :key="comment">
+            <div class="commented-section mt-2">
+              <div class="d-flex flex-row align-items-center commented-user">
+                <div class="profile-image">
+                  <img class="rounded-circle" src="https://i.imgur.com/CFpa3nK.jpg" width="50">
                 </div>
-            <!-- </div> -->
-                <div v-for="comment in this.result.comments" :key="comment">
-
-
-                <div class="commented-section mt-2">
-                  <div class="d-flex flex-row align-items-center commented-user">
-                    <div class="profile-image"><img class="rounded-circle" src="https://i.imgur.com/CFpa3nK.jpg" width="50"></div>
-                    <h4 class="mr-2">{{comment.author}}&nbsp;</h4>
-                    <span class="dot mb-1"></span>
-                    <span class="mb-1 ml-2">&nbsp;{{comment.date}}</span>
-                  </div>
-                  <div class="comment-text-sm">
-                    <span>{{comment.text}}</span>
-                  </div>
-                </div>
-
-        </div> 
-
+                <h4 class="mr-2">{{comment.author}}&nbsp;</h4>
+                <span class="dot mb-1"></span>
+                <span class="mb-1 ml-2">&nbsp;{{comment.date}}&nbsp;&nbsp;</span>
+                <button v-if="this.isAdmin" class="btn btn-danger" @click="$emit('deleteC', this.result, comment)"> DELETE COMMENT</button>
+              </div>
+              <div class="comment-text-sm">
+                <span>{{comment.text}}</span>
+              </div>
+            </div>
+          </div>
+          <button v-if="this.isAdmin" class="btn btn-danger" @click="$emit('deleteM', this.result)"> DELETE </button>
+          <div class="collapse py-2" id="collapseEdit">
+            <input v-model="team1" type="text" class="form-control mr-3" :placeholder=this.result.teamOne>
+            <input v-model="team2" type="text" class="form-control mr-3" :placeholder=this.result.teamTwo>
+            <input v-model="newScore" type="text" class="form-control mr-3" :placeholder=this.result.score>
+            <button class="btn btn-success" @click="$emit('editM', this.result, team1, team2, newScore)" > SAVE EDITS </button>
+          </div>
         </div>
       </div>
     </div>
@@ -45,6 +48,12 @@
 <script>
 export default {
     name: 'ResultWin',
+    data()
+    {
+        return{
+            isAdmin: false,
+        }
+    },
     props: {
     result: {
         default () {
@@ -60,14 +69,17 @@ export default {
         }
         }
     },
+    },
     methods:
     {
-        addComment(message){
-            // TODO
-        }, 
+        // isAdmin(){
+        //     return true;
+        // },
     },
-    
-}
+    mounted()
+    {
+       this.isAdmin = true;
+    },
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -99,57 +111,5 @@ body {
     background-color: #bbb;
     border-radius: 50%;
     display: inline-block;
-}
-
-.hit-voting:hover {
-    color: blue;
-}
-
-.hit-voting {
-    cursor: pointer;
-}
-
-.comment {
-    width: 40%;
-    height: 100px;
-    padding: 10px;
-    background-color: #d0e2bc;
-}
-
-.tip {
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    background: transparent;
-    border: 10px solid #ccc;
-}
-
-.tip-up {
-    top: -25px;
-    /* Same as body margin top + border */
-    left: 10px;
-    border-right-color: transparent;
-    border-left-color: transparent;
-    border-top-color: transparent;
-}
-
-dialogbox .body {
-    position: relative;
-    max-width: 300px;
-    height: auto;
-    margin: 20px 10px;
-    padding: 5px;
-    background-color: #DADADA;
-    border-radius: 3px;
-    border: 5px solid #ccc;
-}
-
-.body .message {
-    min-height: 30px;
-    border-radius: 3px;
-    font-family: Arial;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #797979;
 }
 </style>

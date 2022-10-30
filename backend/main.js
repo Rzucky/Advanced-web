@@ -1,11 +1,12 @@
 const express = require('express');
-var cors = require('cors')
+var cors = require('cors');
+
 const app = express();
 app.use(express.json())
 
 const PORT = process.env.PORT || 5000;
 const NUMDAYS = process.env.NUMDAYS || 5;
-// app.use(cors())
+app.use(cors())
 let data = null;
 
 (async function() {
@@ -17,10 +18,10 @@ const server = app.listen(PORT, () => {
   console.log("server is running on port", server.address().port);
 });
 
-app.get('/getData', cors(), async function(req, res) {
+app.get('/getData', async function(req, res) {
 	console.log('GOTTEN REQUEST')
 	data.teamsData = await getSortedData(data.teamsData);
-	data.matchData[0].comments = [
+	data.matchData[38].comments = [
 		{
 			author: 'User1',
 			text: 'Test',
@@ -38,12 +39,41 @@ app.get('/getData', cors(), async function(req, res) {
 })
 
 
-app.post('/changematch', cors(), async function(req, res) {
+app.post('/changematch', async function(req, res) {
 	console.log('Changing match')
 	const changedGame = req.body
-
-	data.matchData[changedGame.idx] = changedGame  
+	if (changedGame.message && changedGame.message === 'DELETE')
+	{
+		console.log(changedGame)
+		for (let i = 0; i< data.matchData.length; i++)
+		{
+			if (data.matchData[i].idx === changedGame.idx)
+			{
+				console.log(data.matchData[i])
+				
+				data.matchData.splice(i,1);
+			} 
+		}
+	}
+	else if (changedGame.message && changedGame.message === 'NEW')
+	{
+		data.matchData.push(changedGame.match)
+		console.log(changedGame.match)
+	}
+	else
+	{
+		for (let i = 0; i< data.matchData.length; i++)
+		{
+			if (data.matchData[i].idx === changedGame.idx)
+			{
+				data.matchData[i] = changedGame
+			} 
+		}
+	}
+	console.log('b{{{{{{{{{{{{{{', data)
 	data = await recalculateData(data);
+	console.log('awsdoihasodhsa', data)
+
 		
 	if (data){
 		res.send({error: false, data: data.matchData, teams: data.teamsData})
@@ -78,7 +108,7 @@ async function recalculateData(data)
 		if ( score[0] != score[1] )
 		{
 			teamsData[match.teamOne].points += (score[0] < score[1]) ? 0 : 3
-			teamsData[match.teamTwo].points += (score[0] < score[1]) ? 0 : 3
+			teamsData[match.teamTwo].points += (score[0] > score[1]) ? 0 : 3
 
 			teamsData[match.teamOne].scoreDiff += (score[0] - score[1])
 			teamsData[match.teamTwo].scoreDiff += (score[1] - score[0])
@@ -100,18 +130,18 @@ async function recalculateData(data)
 }
 
 
-async function reverseMatches(matches)
-{
-	function compare(b, a) {
-		if (a.idx < b.idx)
-			return -1;
-		if (a.idx > b.idx)
-			return 1;
-		return 0;
-		}
+// async function reverseMatches(matches)
+// {
+// 	function compare(b, a) {
+// 		if (a.idx < b.idx)
+// 			return -1;
+// 		if (a.idx > b.idx)
+// 			return 1;
+// 		return 0;
+// 		}
 	
-		return matches.sort(compare);
-}
+// 		return matches.sort(compare);
+// }
 
 
 async function getSortedData(teams)
@@ -179,7 +209,7 @@ async function cleanUpData(numDays)
 			if ( match.score.ft[0] != match.score.ft[1] )
 			{
 				teamsData[match.team1].points += (match.score.ft[0] < match.score.ft[1]) ? 0 : 3
-				teamsData[match.team2].points += (match.score.ft[0] < match.score.ft[1]) ? 0 : 3
+				teamsData[match.team2].points += (match.score.ft[0] > match.score.ft[1]) ? 0 : 3
 
 				teamsData[match.team1].scoreDiff += (match.score.ft[0] - match.score.ft[1])
 				teamsData[match.team2].scoreDiff += (match.score.ft[1] - match.score.ft[0])
@@ -198,7 +228,7 @@ async function cleanUpData(numDays)
 	}
 	teamsData = await getSortedData(arr);
 
-	matchData = await reverseMatches(matchData)
+	// matchData = await reverseMatches(matchData)
 
 	return {matchData, teamsData};
 }
