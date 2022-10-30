@@ -10,10 +10,8 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### Compiles and run locally (concurrently build and backend)
+npm run start
 
 ### Lints and fixes files
 ```
