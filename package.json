@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "backend": "node ./backend/main.js",
-    "start": "concurrently \"npm run build\" \"npm run backend\""
+    "start": "vue-cli-service build & node ./backend/main.js"
   },
   "dependencies": {
     "@auth0/auth0-vue": "^1.0.2",
