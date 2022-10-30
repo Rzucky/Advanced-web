@@ -1,13 +1,13 @@
 const express = require('express');
 const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 var cors = require('cors');
+const app = express();
 app.use(expressCspHeader({ 
     policies: { 
         'default-src': [expressCspHeader.NONE], 
         'img-src': [expressCspHeader.SELF], 
     } 
 })); 
-const app = express();
 app.use(express.json())
 
 const PORT = process.env.PORT || 5000;
