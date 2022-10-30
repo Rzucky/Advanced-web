@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "backend": "node ./backend/main.js",
-    "start": "vue-cli-service build & node ./backend/main.js"
+    "start": "vue-cli-service build & node ./backend/main.js",
+	"local": "vue-cli-service serve & node ./backend/main.js"
   },
   "dependencies": {
     "@auth0/auth0-vue": "^1.0.2",
@@ -30,7 +31,8 @@
     "@vue/cli-service": "~5.0.0",
     "concurrently": "^7.5.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "npm-run-all": "^4.1.5"
   },
   "eslintConfig": {
     "root": true,
