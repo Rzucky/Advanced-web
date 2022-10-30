@@ -1,6 +1,10 @@
-<template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<template  >
+          <div class="gray">
+        <div class="containerBG">
+          <HelloWorld msg="Welcome to Your Vue.js App"/>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -14,7 +18,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -22,5 +26,19 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.containerBG {
+  background-image: url(~@/assets/green.webp);
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.newImg {
+    background-image: url('~@/assets/football.jpg');
 }
 </style>
